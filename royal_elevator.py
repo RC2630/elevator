@@ -80,20 +80,13 @@ class RoyalElevator(Elevator):
         assert units >= 0
         if self.direction == "rest":
             self.handle_initial_rest()
-            if self.direction == "rest":
-                return
         elif isclose(self.curr_pos, round(self.curr_pos)):
             self.handle_at_integer()
-            if self.direction == "rest":
-                return
-        while not isclose(units, 0):
+        while not isclose(units, 0) and self.direction != "rest":
             d: float = self.distance_to_next_integer()
-            if d <= units or isclose(d, units):
-                self.curr_pos += d if self.direction == "up" else -d
-                units -= d
-                self.handle_at_integer()
-                if self.direction == "rest":
-                    return
-            else:
+            if d > units and not isclose(d, units):
                 self.curr_pos += units if self.direction == "up" else -units
                 return
+            self.curr_pos += d if self.direction == "up" else -d
+            units -= d
+            self.handle_at_integer()
