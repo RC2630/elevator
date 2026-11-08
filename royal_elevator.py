@@ -69,20 +69,7 @@ class RoyalElevator(Elevator):
             self.handle_at_integer()
             if self.direction != "rest":
                 return
-            if self.curr_task is None:
-                if len(self.internal_lit_floors) == 0:
-                    return
-                assert all(
-                    not isclose(floor, self.curr_pos)
-                    for floor in self.internal_lit_floors
-                )
-                higher: int = sum(floor > self.curr_pos for floor in self.internal_lit_floors)
-                lower: int = len(self.internal_lit_floors) - higher
-                if higher >= lower:
-                    self.direction = "up"
-                else:
-                    self.direction = "down"
-                return
+            assert self.curr_task is not None
         if self.curr_task.floor >= self.curr_pos:
             self.direction = "up"
         else:
